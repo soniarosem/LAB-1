@@ -28,6 +28,15 @@ class Student(db.Model):
     programme = db.Column(db.String(100))
     start_year = db.Column(db.Integer)
     stickers = db.relationship('StudentSticker', backref='student', lazy=True)
+    _sticker_display = None
+
+    @property
+    def sticker_display(self):
+        return self._sticker_display
+
+    @sticker_display.setter
+    def sticker_display(self, value):
+        self._sticker_display = value
 
     def __init__(self, id, first_name, image, last_name, programme, start_year):
         self.id = id

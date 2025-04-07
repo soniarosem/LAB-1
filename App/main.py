@@ -152,7 +152,7 @@ def home(student_id=None):
                     ss.student_id == student_id
                 ).all()
 
-                selected_student.stickers = [{
+                selected_student.sticker_display = [{
                     'id': ss.id,
                     'name': s.name,
                     'image': s.image,
@@ -177,7 +177,7 @@ def home(student_id=None):
                 ).all()
 
                 # Format sticker data for template
-                selected_student.stickers = [{
+                selected_student.sticker_display = [{
                     'id': ss.id,
                     'name': s.name,
                     'image': s.image,

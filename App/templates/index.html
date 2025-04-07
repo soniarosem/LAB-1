@@ -118,7 +118,7 @@
 
         <h3>{{ selected_student.first_name }}'s Stickers</h3>
         <div class="sticker-grid">
-          {% for sticker in selected_student.stickers %}
+          {% for sticker in selected_student.sticker_display %}
           <div class="card sticker-card">
             <img src="{{ url_for('static', filename=sticker.image) }}" alt="{{ sticker.name }}">
             <p>{{ sticker.name }}</p>
