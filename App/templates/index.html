@@ -55,10 +55,12 @@
   <body>
     <nav class="purple">
       <div class="nav-wrapper">
+        {% if current_user %}
         <a href="#" class="brand-logo left">Logged in as: {{ current_user.username }}</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li><a href="/logout">Logout</a></li>
         </ul>
+        {% endif %}
       </div>
     </nav>
 

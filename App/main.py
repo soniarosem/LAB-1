@@ -190,7 +190,7 @@ def home(student_id=None):
                              selected_student=selected_student, 
                              students=students,
                              stickers=stickers,
-                             user=current_user)
+                             current_user=current_user)
 
 @app.route('/give_sticker/<student_id>', methods=['POST'])
 @jwt_required()
