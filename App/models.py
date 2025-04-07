@@ -55,7 +55,7 @@ class StudentSticker(db.Model):
     awarded_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date_awarded = db.Column(db.DateTime, default=db.func.current_timestamp())
 
-    def __init__(self, student_id, sticker_id, awarded_by)
+    def __init__(self, student_id, sticker_id, awarded_by):
         self.student_id = student_id
         self.sticker_id = sticker_id
         self.awarded_by = awarded_by
