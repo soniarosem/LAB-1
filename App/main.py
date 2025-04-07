@@ -153,10 +153,10 @@ def home(student_id=None):
                 ).all()
 
                 selected_student.stickers = [{
-                    'id': ss.StudentSticker.id,
+                    'id': ss.id,
                     'name': s.name,
                     'image': s.image,
-                    'date_awarded': ss.StudentSticker.date_awarded.strftime('%Y-%m-%d'),
+                    'date_awarded': ss.date_awarded.strftime('%Y-%m-%d'),
                     'awarded_by': u.username,
                     'can_delete': u.id == current_user.id
                 } for ss, s, u in student_stickers]
