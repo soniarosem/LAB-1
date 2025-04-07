@@ -61,68 +61,6 @@ def expired_token_callback(jwt_header, jwt_payload):
 
 
 def parse_students():
-  with open('students.csv', mode='r', encoding='utf-8') as file:
-    csv_reader = csv.DictReader(file)
-    for row in csv_reader:
-      student = Student(id=row['ID'],
-                        first_name=row['FirstName'],
-                        image=row['Picture'],
-                        last_name=row['LastName'],
-                        programme=row['Programme'],
-                        start_year=row['YearStarted'])
-      db.session.add(student)
-    db.session.commit()
-
-
-def create_users():
-  rob = User(username="rob", password="robpass")
-  bob = User(username="bob", password="bobpass")
-  sally = User(username="sally", password="sallypass")
-  pam = User(username="pam", password="pampass")
-  chris = User(username="chris", password="chrispass")
-  db.session.add_all([rob, bob])
-  db.session.commit()
-
-
-def create_stickers():
-  awesome = Sticker(name="Awesome", image="/static/stickers/awesome.png")
-  cool = Sticker(name="Cool", image="/static/stickers/cool.png")
-  bravo = Sticker(name="Bravo", image="/static/stickers/bravo.png")
-  excellent = Sticker(name="Excellent", image="/static/stickers/excellent.png")
-  good_job = Sticker(name="Good Job", image="/static/stickers/good_job.png")
-  thumbs_up = Sticker(name="Thumbs Up", image="/static/stickers/thumbs_up.png")
-  well_done = Sticker(name="Well Done", image="/static/stickers/well_done.png")
-  wonderful = Sticker(name="Wonderful", image="/static/stickers/wonderful.png")
-  db.session.add_all([
-      awesome, cool, bravo, excellent, good_job, thumbs_up, well_done,
-      wonderful
-  ])
-  db.session.commit()
-
-
-def initialize_db():
-    db.drop_all()
-    db.create_all()
-    create_users()
-    parse_students()
-    create_stickers()
-    print('database initialized')
-
-def create_stickers():
-    stickers = [
-        Sticker(name="Awesome", image="stickers/awesome.png"),
-        Sticker(name="Cool", image="stickers/cool.png"),
-        Sticker(name="Bravo", image="stickers/bravo.png"),
-        Sticker(name="Excellent", image="stickers/excellent.png"),
-        Sticker(name="Good Job", image="stickers/good_job.png"),
-        Sticker(name="Thumbs Up", image="stickers/thumbs_up.png"),
-        Sticker(name="Well Done", image="stickers/well_done.png"),
-        Sticker(name="Wonderful", image="stickers/wonderful.png")
-    ]
-    db.session.add_all(stickers)
-    db.session.commit()
-
-def parse_students():
     with open('students.csv', mode='r', encoding='utf-8') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
@@ -135,7 +73,40 @@ def parse_students():
                 start_year=row['YearStarted']
             )
             db.session.add(student)
-        db.session.commit()
+    db.session.commit()
+
+def create_users():
+    users = [
+        User(username="rob", password="robpass"),
+        User(username="bob", password="bobpass"),
+        User(username="sally", password="sallypass"),
+        User(username="pam", password="pampass"),
+        User(username="chris", password="chrispass")
+    ]
+    db.session.add_all(users)
+    db.session.commit()
+
+def create_stickers():
+    stickers = [
+        Sticker(name="Awesome", image="/static/stickers/awesome.png"),
+        Sticker(name="Cool", image="/static/stickers/cool.png"),
+        Sticker(name="Bravo", image="/static/stickers/bravo.png"),
+        Sticker(name="Excellent", image="/static/stickers/excellent.png"),
+        Sticker(name="Good Job", image="/static/stickers/good_job.png"),
+        Sticker(name="Thumbs Up", image="/static/stickers/thumbs_up.png"),
+        Sticker(name="Well Done", image="/static/stickers/well_done.png"),
+        Sticker(name="Wonderful", image="/static/stickers/wonderful.png")
+    ]
+    db.session.add_all(stickers)
+    db.session.commit()
+
+def initialize_db():
+    db.drop_all()
+    db.create_all()
+    create_users()
+    parse_students()
+    create_stickers()
+    print('database initialized')
 
 
 @app.route('/')
