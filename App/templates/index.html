@@ -104,10 +104,11 @@
             </div>
             <div class="input-field">
               <form method="POST" action="{{ url_for('give_sticker', student_id=selected_student.id) }}">
-                <select name="sticker_id" class="icons">
-                  <option value="" disabled selected>Award Sticker</option>
+                <label>Award Sticker</label>
+                <select name="sticker_id">
+                  <option value="" disabled selected>Choose a sticker</option>
                   {% for sticker in stickers %}
-                  <option value="{{ sticker.id }}" data-icon="{{ url_for('static', filename=sticker.image) }}">{{ sticker.name }}</option>
+                  <option value="{{ sticker.id }}">{{ sticker.name }}</option>
                   {% endfor %}
                 </select>
                 <button type="submit" class="btn waves-effect waves-light">Give</button>
