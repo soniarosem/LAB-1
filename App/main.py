@@ -60,18 +60,18 @@ def expired_token_callback(jwt_header, jwt_payload):
   return redirect(url_for('login'))
 
 
-# def parse_students():
-#   with open('students.csv', mode='r', encoding='utf-8') as file:
-#     csv_reader = csv.DictReader(file)
-#     for row in csv_reader:
-#       student = Student(id=row['ID'],
-#                         first_name=row['FirstName'],
-#                         image=row['Picture'],
-#                         last_name=row['LastName'],
-#                         programme=row['Programme'],
-#                         start_year=row['YearStarted'])
-#       db.session.add(student)
-#     db.session.commit()
+def parse_students():
+  with open('students.csv', mode='r', encoding='utf-8') as file:
+    csv_reader = csv.DictReader(file)
+    for row in csv_reader:
+      student = Student(id=row['ID'],
+                        first_name=row['FirstName'],
+                        image=row['Picture'],
+                        last_name=row['LastName'],
+                        programme=row['Programme'],
+                        start_year=row['YearStarted'])
+      db.session.add(student)
+    db.session.commit()
 
 
 def create_users():
@@ -84,20 +84,20 @@ def create_users():
   db.session.commit()
 
 
-# def create_stickers():
-#   awesome = Sticker(name="Awesome", image="/static/stickers/awesome.png")
-#   cool = Sticker(name="Cool", image="/static/stickers/cool.png")
-#   bravo = Sticker(name="Bravo", image="/static/stickers/bravo.png")
-#   excellent = Sticker(name="Excellent", image="/static/stickers/excellent.png")
-#   good_job = Sticker(name="Good Job", image="/static/stickers/good_job.png")
-#   thumbs_up = Sticker(name="Thumbs Up", image="/static/stickers/thumbs_up.png")
-#   well_done = Sticker(name="Well Done", image="/static/stickers/well_done.png")
-#   wonderful = Sticker(name="Wonderful", image="/static/stickers/wonderful.png")
-#   db.session.add_all([
-#       awesome, cool, bravo, excellent, good_job, thumbs_up, well_done,
-#       wonderful
-#   ])
-#   db.session.commit()
+def create_stickers():
+  awesome = Sticker(name="Awesome", image="/static/stickers/awesome.png")
+  cool = Sticker(name="Cool", image="/static/stickers/cool.png")
+  bravo = Sticker(name="Bravo", image="/static/stickers/bravo.png")
+  excellent = Sticker(name="Excellent", image="/static/stickers/excellent.png")
+  good_job = Sticker(name="Good Job", image="/static/stickers/good_job.png")
+  thumbs_up = Sticker(name="Thumbs Up", image="/static/stickers/thumbs_up.png")
+  well_done = Sticker(name="Well Done", image="/static/stickers/well_done.png")
+  wonderful = Sticker(name="Wonderful", image="/static/stickers/wonderful.png")
+  db.session.add_all([
+      awesome, cool, bravo, excellent, good_job, thumbs_up, well_done,
+      wonderful
+  ])
+  db.session.commit()
 
 
 def initialize_db():
