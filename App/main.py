@@ -101,12 +101,41 @@ def create_users():
 
 
 def initialize_db():
-  db.drop_all()
-  db.create_all()
-  create_users()
-  # parse_students()
-  # create_stickers()
-  print('database intialized')
+    db.drop_all()
+    db.create_all()
+    create_users()
+    parse_students()
+    create_stickers()
+    print('database initialized')
+
+def create_stickers():
+    stickers = [
+        Sticker(name="Awesome", image="stickers/awesome.png"),
+        Sticker(name="Cool", image="stickers/cool.png"),
+        Sticker(name="Bravo", image="stickers/bravo.png"),
+        Sticker(name="Excellent", image="stickers/excellent.png"),
+        Sticker(name="Good Job", image="stickers/good_job.png"),
+        Sticker(name="Thumbs Up", image="stickers/thumbs_up.png"),
+        Sticker(name="Well Done", image="stickers/well_done.png"),
+        Sticker(name="Wonderful", image="stickers/wonderful.png")
+    ]
+    db.session.add_all(stickers)
+    db.session.commit()
+
+def parse_students():
+    with open('students.csv', mode='r', encoding='utf-8') as file:
+        csv_reader = csv.DictReader(file)
+        for row in csv_reader:
+            student = Student(
+                id=row['ID'],
+                first_name=row['FirstName'],
+                image=row['Picture'],
+                last_name=row['LastName'],
+                programme=row['Programme'],
+                start_year=row['YearStarted']
+            )
+            db.session.add(student)
+        db.session.commit()
 
 
 @app.route('/')
@@ -136,6 +165,28 @@ def home(student_id=None):
     students = Student.query.all()
     stickers = Sticker.query.all()
     selected_student = None
+    
+    if student_id:
+        selected_student = Student.query.get(student_id)
+        if selected_student:
+            student_stickers = db.session.query(
+                StudentSticker, Sticker, User
+            ).join(
+                Sticker, StudentSticker.sticker_id == Sticker.id
+            ).join(
+                User, StudentSticker.awarded_by == User.id
+            ).filter(
+                StudentSticker.student_id == student_id
+            ).all()
+            
+            selected_student.stickers = [{
+                'id': ss.StudentSticker.id,
+                'name': s.name,
+                'image': s.image,
+                'date_awarded': ss.StudentSticker.date_awarded.strftime('%Y-%m-%d'),
+                'awarded_by': u.username,
+                'can_delete': u.id == current_user.id
+            } for ss, s, u in student_stickers]
     
     if student_id:
         selected_student = Student.query.get(student_id)

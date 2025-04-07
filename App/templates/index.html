@@ -83,7 +83,7 @@
               <div>{{ student.first_name }} {{ student.last_name }}</div>
               <div class="grey-text">{{ student.id }}</div>
             </div>
-            <a href="{{ url_for('index', student_id=student.id) }}" class="btn-flat">View Details</a>
+            <a href="{{ url_for('home', student_id=student.id) }}" class="btn-flat">View Details</a>
           </li>
           {% endfor %}
         </ul>
@@ -122,7 +122,9 @@
             <p>{{ sticker.name }}</p>
             <p class="grey-text">Date Awarded: {{ sticker.date_awarded }}</p>
             <p class="grey-text">Awarded by: {{ sticker.awarded_by }}</p>
-            <button class="btn-flat waves-effect">Remove</button>
+            {% if sticker.can_delete %}
+            <a href="{{ url_for('delete_sticker', sticker_award_id=sticker.id) }}" class="btn-flat waves-effect">Remove</a>
+            {% endif %}
           </div>
           {% endfor %}
         </div>
