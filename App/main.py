@@ -130,10 +130,82 @@ def login_action():
 
 
 @app.route('/app')
-@app.route('/app/<id>')
+@app.route('/app/<student_id>')
 @jwt_required()
-def home(id=None):
-  return render_template('index.html', selected_student=None, students=[], user=current_user)
+def home(student_id=None):
+    students = Student.query.all()
+    stickers = Sticker.query.all()
+    selected_student = None
+    
+    if student_id:
+        selected_student = Student.query.get(student_id)
+        if selected_student:
+            # Get stickers awarded to student with award info
+            student_stickers = db.session.query(
+                StudentSticker, Sticker, User
+            ).join(
+                Sticker, StudentSticker.sticker_id == Sticker.id
+            ).join(
+                User, StudentSticker.awarded_by == User.id
+            ).filter(
+                StudentSticker.student_id == student_id
+            ).all()
+            
+            # Format sticker data for template
+            selected_student.stickers = [{
+                'id': ss.StudentSticker.id,
+                'name': s.name,
+                'image': s.image,
+                'date_awarded': ss.StudentSticker.date_awarded,
+                'awarded_by': u.username,
+                'can_delete': u.id == current_user.id
+            } for ss, s, u in student_stickers]
+    
+    return render_template('index.html', 
+                         selected_student=selected_student, 
+                         students=students,
+                         stickers=stickers,
+                         user=current_user)
+
+@app.route('/give_sticker/<student_id>', methods=['POST'])
+@jwt_required()
+def give_sticker(student_id):
+    sticker_id = request.form.get('sticker_id')
+    
+    # Check if sticker already awarded
+    existing = StudentSticker.query.filter_by(
+        student_id=student_id,
+        sticker_id=sticker_id
+    ).first()
+    
+    if existing:
+        flash('This sticker has already been awarded to this student')
+    else:
+        new_sticker = StudentSticker(
+            student_id=student_id,
+            sticker_id=sticker_id,
+            awarded_by=current_user.id
+        )
+        db.session.add(new_sticker)
+        db.session.commit()
+        flash('Sticker awarded successfully')
+    
+    return redirect(url_for('home', student_id=student_id))
+
+@app.route('/delete_sticker/<sticker_award_id>')
+@jwt_required()
+def delete_sticker(sticker_award_id):
+    sticker_award = StudentSticker.query.get(sticker_award_id)
+    
+    if sticker_award and sticker_award.awarded_by == current_user.id:
+        student_id = sticker_award.student_id
+        db.session.delete(sticker_award)
+        db.session.commit()
+        flash('Sticker removed successfully')
+        return redirect(url_for('home', student_id=student_id))
+    
+    flash('You can only delete stickers that you awarded')
+    return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
