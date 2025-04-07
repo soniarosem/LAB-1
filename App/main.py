@@ -133,61 +133,61 @@ def login_action():
 @app.route('/app/<student_id>')
 @jwt_required()
 def home(student_id=None):
-    students = Student.query.all()
-    stickers = Sticker.query.all()
-    selected_student = None
-    
-    if student_id:
-        selected_student = Student.query.get(student_id)
-        if selected_student:
-            student_stickers = db.session.query(
-                StudentSticker, Sticker, User
-            ).join(
-                Sticker, StudentSticker.sticker_id == Sticker.id
-            ).join(
-                User, StudentSticker.awarded_by == User.id
-            ).filter(
-                StudentSticker.student_id == student_id
-            ).all()
-            
-            selected_student.stickers = [{
-                'id': ss.StudentSticker.id,
-                'name': s.name,
-                'image': s.image,
-                'date_awarded': ss.StudentSticker.date_awarded.strftime('%Y-%m-%d'),
-                'awarded_by': u.username,
-                'can_delete': u.id == current_user.id
-            } for ss, s, u in student_stickers]
-    
-    if student_id:
-        selected_student = Student.query.get(student_id)
-        if selected_student:
-            # Get stickers awarded to student with award info
-            student_stickers = db.session.query(
-                StudentSticker, Sticker, User
-            ).join(
-                Sticker, StudentSticker.sticker_id == Sticker.id
-            ).join(
-                User, StudentSticker.awarded_by == User.id
-            ).filter(
-                StudentSticker.student_id == student_id
-            ).all()
-            
-            # Format sticker data for template
-            selected_student.stickers = [{
-                'id': ss.StudentSticker.id,
-                'name': s.name,
-                'image': s.image,
-                'date_awarded': ss.StudentSticker.date_awarded,
-                'awarded_by': u.username,
-                'can_delete': u.id == current_user.id
-            } for ss, s, u in student_stickers]
-    
-    return render_template('index.html', 
-                         selected_student=selected_student, 
-                         students=students,
-                         stickers=stickers,
-                         user=current_user)
+        students = Student.query.all()
+        stickers = Sticker.query.all()
+        selected_student = None
+
+        if student_id:
+            selected_student = Student.query.get(student_id)
+            if selected_student:
+                student_stickers = db.session.query(
+                    StudentSticker, Sticker, User
+                ).join(
+                    Sticker, StudentSticker.sticker_id == Sticker.id
+                ).join(
+                    User, StudentSticker.awarded_by == User.id
+                ).filter(
+                    StudentSticker.student_id == student_id
+                ).all()
+
+                selected_student.stickers = [{
+                    'id': ss.StudentSticker.id,
+                    'name': s.name,
+                    'image': s.image,
+                    'date_awarded': ss.StudentSticker.date_awarded.strftime('%Y-%m-%d'),
+                    'awarded_by': u.username,
+                    'can_delete': u.id == current_user.id
+                } for ss, s, u in student_stickers]
+
+        if student_id:
+            selected_student = Student.query.get(student_id)
+            if selected_student:
+                # Get stickers awarded to student with award info
+                student_stickers = db.session.query(
+                    StudentSticker, Sticker, User
+                ).join(
+                    Sticker, StudentSticker.sticker_id == Sticker.id
+                ).join(
+                    User, StudentSticker.awarded_by == User.id
+                ).filter(
+                    StudentSticker.student_id == student_id
+                ).all()
+
+                # Format sticker data for template
+                selected_student.stickers = [{
+                    'id': ss.StudentSticker.id,
+                    'name': s.name,
+                    'image': s.image,
+                    'date_awarded': ss.StudentSticker.date_awarded,
+                    'awarded_by': u.username,
+                    'can_delete': u.id == current_user.id
+                } for ss, s, u in student_stickers]
+
+        return render_template('index.html', 
+                             selected_student=selected_student, 
+                             students=students,
+                             stickers=stickers,
+                             user=current_user)
 
 @app.route('/give_sticker/<student_id>', methods=['POST'])
 @jwt_required()

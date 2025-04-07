@@ -29,11 +29,24 @@ class Student(db.Model):
     start_year = db.Column(db.Integer)
     stickers = db.relationship('StudentSticker', backref='student', lazy=True)
 
+    def __init__(self, id, first_name, image, last_name, programme, start_year):
+        self.id = id
+        self.first_name = first_name
+        self.image = image
+        self.last_name = last_name
+        self.programme = programme
+        self.start_year = start_year
+
 class Sticker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     image = db.Column(db.String(200), nullable=False)
     awards = db.relationship('StudentSticker', backref='sticker', lazy=True)
+
+    def __init__(self, name, image):
+        self.name = name
+        self.image = image
+        
 
 class StudentSticker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,3 +54,8 @@ class StudentSticker(db.Model):
     sticker_id = db.Column(db.Integer, db.ForeignKey('sticker.id'), nullable=False)
     awarded_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date_awarded = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def __init__(self, student_id, sticker_id, awarded_by)
+        self.student_id = student_id
+        self.sticker_id = sticker_id
+        self.awarded_by = awarded_by
