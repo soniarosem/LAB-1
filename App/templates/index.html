@@ -121,7 +121,7 @@
         <div class="sticker-grid">
           {% for sticker in selected_student.sticker_display %}
           <div class="card sticker-card">
-            <img src="{{ url_for('static', filename=sticker.image) }}" alt="{{ sticker.name }}">
+            <img src="{{ sticker.image }}" alt="{{ sticker.name }}">
             <p>{{ sticker.name }}</p>
             <p class="grey-text">Date Awarded: {{ sticker.date_awarded }}</p>
             <p class="grey-text">Awarded by: {{ sticker.awarded_by }}</p>
